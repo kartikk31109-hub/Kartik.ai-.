@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kartik.ai</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#ffffff;
+    color:#222;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* Header */
+.header{
+    height:60px;
+    border-bottom:1px solid #ddd;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 16px;
+    background:white;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    color:#111;
+}
+
+.logo span{
+    color:#10a37f;
+}
+
+.header button{
+    border:0;
+    background:transparent;
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* Chat */
+.chat{
+    height:calc(100vh - 125px);
+    overflow-y:auto;
+    padding:20px 15px 100px;
+}
+
+.welcome{
+    text-align:center;
+    margin-top:20vh;
+}
+
+.welcome h1{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.welcome p{
+    color:#777;
+}
+
+/* Messages */
+.message{
+    max-width:850px;
+    margin:12px auto;
+    padding:14px 16px;
+    border-radius:14px;
+    line-height:1.5;
+    white-space:pre-wrap;
+}
+
+.user{
+    background:#f0f0f0;
+}
+
+.bot{
+    background:#ffffff;
+}
+
+/* Bottom input */
+.bottom{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:white;
+    border-top:1px solid #ddd;
+    padding:10px;
+}
+
+.inputbox{
+    max-width:850px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    border:1px solid #bbb;
+    border-radius:25px;
+    padding:5px 7px 5px 15px;
+    background:white;
+}
+
+#messageInput{
+    flex:1;
+    border:0;
+    outline:none;
+    font-size:16px;
+    padding:10px;
+}
+
+#sendBtn{
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:50%;
+    background:#10a37f;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+}
+
+#sendBtn:hover{
+    opacity:.85;
+}
+
+/* Dark mode */
+.dark{
+    background:#212121;
+    color:#eee;
+}
+
+.dark .header,
+.dark .bottom{
+    background:#212121;
+    border-color:#444;
+}
+
+.dark .inputbox{
+    background:#303030;
+    border-color:#555;
+}
+
+.dark #messageInput{
+    background:#303030;
+    color:white;
+}
+
+.dark .user{
+    background:#303030;
+}
+
+.dark .bot{
+    background:#212121;
+}
+
+.dark .welcome p{
+    color:#aaa;
+}
+
+/* Mobile */
+@media(max-width:600px){
+
+    .logo{
+        font-size:20px;
+    }
+
+    .welcome h1{
+        font-size:25px;
+    }
+
+    .message{
+        max-width:95%;
+    }
+
+    #messageInput{
+        font-size:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo">
+        Kartik<span>.ai</span>
+    </div>
+
+    <button id="themeBtn">🌙</button>
+</header>
+
+
+<!-- Chat area -->
+<main class="chat" id="chat">
+
+    <div class="welcome" id="welcome">
+        <h1>How can I help you?</h1>
+        <p>Welcome to Kartik.ai</p>
+    </div>
+
+</main>
+
+
+<!-- Input -->
+<div class="bottom">
+
+    <div class="inputbox">
+
+        <input
+            type="text"
+            id="messageInput"
+            placeholder="Message Kartik.ai..."
+            autocomplete="off"
+        >
+
+        <button id="sendBtn">➤</button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const input = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const chat = document.getElementById("chat");
+const welcome = document.getElementById("welcome");
+const themeBtn = document.getElementById("themeBtn");
+
+
+/* Send message */
+function sendMessage(){
+
+    const text = input.value.trim();
+
+    if(text === ""){
+        return;
+    }
+
+    welcome.style.display = "none";
+
+    /* User message */
+    const userMessage = document.createElement("div");
+
+    userMessage.className = "message user";
+
+    userMessage.textContent = text;
+
+    chat.appendChild(userMessage);
+
+    input.value = "";
+
+    chat.scrollTop = chat.scrollHeight;
+
+
+    /* Bot message */
+    setTimeout(function(){
+
+        const botMessage = document.createElement("div");
+
+        botMessage.className = "message bot";
+
+        botMessage.textContent =
+        "Hello! 👋 Main Kartik.ai hoon.\n\n" +
+        "Abhi mera demo mode chal raha hai. " +
+        "Asli AI answers ke liye mujhe AI backend se connect karna hoga.";
+
+        chat.appendChild(botMessage);
+
+        chat.scrollTop = chat.scrollHeight;
+
+    },600);
+}
+
+
+/* Button */
+sendBtn.addEventListener("click",sendMessage);
+
+
+/* Enter key */
+input.addEventListener("keydown",function(event){
+
+    if(event.key === "Enter"){
+        sendMessage();
+    }
+
+});
+
+
+/* Dark mode */
+themeBtn.addEventListener("click",function(){
+
+    document.body.classList.toggle("dark");
+
+    if(document.body.classList.contains("dark")){
+        themeBtn.textContent = "☀️";
+    }else{
+        themeBtn.textContent = "🌙";
+    }
+
+});
+
+</script>
+
+</body>
+</html>
